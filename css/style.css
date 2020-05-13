@@ -1,6 +1,6 @@
 .led {
     border-radius: 50%;
-    border: outset thick black;
+    border: outset thin black;
     width: 1rem;
     height: 1rem;
 
