@@ -1,0 +1,14 @@
+{
+  "name": "js-computersim",
+  "version": "1.0.0",
+  "description": "Project to emulate a virtual CPU in the Browser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jon Trauntvein",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.0.0"
+  }
+}
