@@ -33,6 +33,12 @@ function VirtualMemory({
    mr_index = 2
 })
 {
+   if(width <= 8)
+      this.storage_type = Uint8Array;
+   else if(width <= 16)
+      this.storage_type = Uint16Array;
+   else
+      this.storage_type = Uint32Array;
    if(!clock)
       throw Error("system clock must be provided");
    if(!data_bus) 
@@ -56,9 +62,7 @@ function VirtualMemory({
    this.bus_mask = 0;
    for(let i = 0; i < width; ++i)
       this.bus_mask |= (1 << i);
-   this.storage = new Array(size);
-   for(let i = 0; i < size; ++i)
-      this.storage[i] = 0;
+   this.storage = new this.storage_type(size);
    clock.add_rising_client(() => {
       const address = this.address_register.register;
       if(control_bus.get(mr_index))
