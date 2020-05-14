@@ -9,7 +9,7 @@
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
-        "ecmaVersion": 11,
+        "ecmaVersion": 2016,
         "sourceType": "module"
     },
     "rules": {

@@ -13,11 +13,14 @@
  * 
  * @param {number=256} options.size Specifies the number of cells in this memory.
  * 
- * @param {number=0} options.mi_index Specifies the index of control bus line that enables the memory address register to load
+ * @param {number=0} options.mai_index Specifies the index of control bus line that enables the memory address register to load
  * from the data bus.
  * 
- * @param {number=1} options.mo_index Specifies the index of the control bus line that enables the memory to output the currently
+ * @param {number=1} options.mw_index Specifies the index of the control bus line that enables the memory to output the currently
  * addressed cell to the data bus.
+ * 
+ * @param {number=2} options.mr_index Specifies the index of the control bus line that enables the memory to read the value on the 
+ * data bus into the currently addressed cell.
  */
 function VirtualMemory({
    clock = null,
@@ -25,8 +28,9 @@ function VirtualMemory({
    control_bus = null,
    width = 8,
    size = 256,
-   mi_index = 0,
-   mo_index = 1
+   mai_index = 0,
+   mw_index = 1,
+   mr_index = 2
 })
 {
    if(!clock)
@@ -38,26 +42,29 @@ function VirtualMemory({
    this.clock = clock;
    this.data_bus = data_bus;
    this.control_bus = control_bus;
-   this.mo_index = mo_index;
+   this.mr_index = mr_index;
+   this.mw_index = mw_index;
+   this.mai_index = mai_index;
+   this.width = width;
    this.address_register = new VirtualRegister({
       clock: clock,
       data_bus: data_bus,
       control_bus: control_bus,
       size: width,
-      read_enable_idx: mi_index
+      read_enable_idx: mai_index
    });
-   this.bus_mask = 1;
+   this.bus_mask = 0;
    for(let i = 0; i < width; ++i)
-   {
-      this.bus_mask <<= 1;
-      this.bus_mask |= 1;
-   }
+      this.bus_mask |= (1 << i);
    this.storage = new Array(size);
    for(let i = 0; i < size; ++i)
       this.storage[i] = 0;
    clock.add_rising_client(() => {
-      if(control_bus.get(mo_index))
-         bus.register = this.storage[this.address_register.register] & bus_mask;
+      const address = this.address_register.register;
+      if(control_bus.get(mr_index))
+         this.data_bus.register = this.storage[address] & this.bus_mask;
+      if(control_bus.get(mw_index))
+         this.storage[address] = this.data_bus.register & this.bus_mask;
    });
 }
 

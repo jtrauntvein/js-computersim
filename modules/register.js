@@ -42,12 +42,9 @@ function VirtualRegister({
    this.size = size,
    this.read_enable_idx = read_enable_idx;
    this.write_enable_idx = write_enable_idx;
-   this.bus_mask = 1;
+   this.bus_mask = 0;
    for(let i = 0; i < size; ++i)
-   {
-      this.bus_mask <<= 1;
-      this.bus_mask |= 1;
-   }
+      this.bus_mask |= (1 << i);
    this.register = 0; // we will use a number for the 
    clock.add_rising_client(() => {
       if(write_enable_idx >= 0 && control_bus.get(write_enable_idx))
