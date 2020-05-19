@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>Virtual CPU in JavaScript</title>
+      <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+      <link rel="stylesheet"
+            href="css/style.css" >
+      <meta name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   </head>
+   <body>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
+         <div class="navbar-brand" >Virtual CPU in JavaScript - The ALU Module</div>
+      </nav>
+
+      <div class="container-fluid" >
+
+         <div class="row" >
+            <div class="col-lg-4" >
+               <div class="card" >
+                  <div class="card-body" >
+                     <h5 class="card-title" >Clock</h5>
+                     <div class="d-flex flex-row m-3" >
+                        <button class="btn btn-primary align-middle m-2"
+                                type="button"
+                                id="clock-btn" >Manual Cycle</button>
+                        <div class="m-2" >
+                           <div class="form-check form-check align-middle">
+                              <input type="radio"
+                                     name="clock-options"
+                                     id="clock-auto"
+                                     value="auto">
+                              <label class="form-check-label" for="clock-auto" >Auto</label>
+                           </div>
+                           <div class="form-check form-check">
+                              <input type="radio"
+                                     name="clock-options"
+                                     id="clock-manual"
+                                     value="manual" checked>
+                              <label class="form-check-label"
+                                     for="clock-manual" >Manual</label>
+                           </div>
+                        </div>
+                        <span class="m-2">
+                           <label class="form-label"
+                                  for="clock-interval" >Interval (ms)</label>
+                           <input type="number"
+                                  class="form-control"
+                                  id="clock-interval"
+                                  value="1000"
+                                  min="2"
+                                  max="5000" 
+                                  step="100">
+                        </span>
+                        <span class="led led-on align-middle m-2"
+                              id="clock-led"></span>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="card mt-3">
+                  <div class="card-body">
+                     <h5 class="card-title">Memory Status</h5>
+                     <h6>Address Register</h6>
+                     <div class="d-flex flex-row m-2">
+                        <span class="led m-2 mem-address-led"></span>
+                        <span class="led m-2 mem-address-led"></span>
+                        <span class="led m-2 mem-address-led"></span>
+                        <span class="led m-2 mem-address-led"></span>
+                        <span class="led m-2 mem-address-led"></span>
+                        <span class="led m-2 mem-address-led"></span>
+                        <span class="led m-2 mem-address-led"></span>
+                        <span class="led m-2 mem-address-led"></span>
+                     </div>
+                     <h6>Output Register</h6>
+                     <div class="d-flex m-2 mflex-row">
+                        <span class="led m-2 mem-output-led"></span>
+                        <span class="led m-2 mem-output-led"></span>
+                        <span class="led m-2 mem-output-led"></span>
+                        <span class="led m-2 mem-output-led"></span>
+                        <span class="led m-2 mem-output-led"></span>
+                        <span class="led m-2 mem-output-led"></span>
+                        <span class="led m-2 mem-output-led"></span>
+                        <span class="led m-2 mem-output-led"></span>
+                     </div>
+                     <div class="d-flex flex-row m-2">
+                        <button type="button" id="control-MAI" class="btn btn-sm btn-primary d-flex flex-row m-2">
+                           <span class="m-2">MAI</span> <span class="led m-2 control-bus-led"></span>
+                        </button>
+                        <button type="button" id="control-MW" class="btn btn-sm btn-primary d-flex flex-row m-2">
+                           <span class="m-2">MW</span> <span class="led m-2 control-bus-led"></span>
+                        </button>
+                        <button type="button" id="control-MR" class="btn btn-sm btn-primary d-flex flex-row m-2">
+                           <span class="m-2">MR</span> <span class="led m-2 control-bus-led"></span>
+                        </button>
+                     </div>   
+                  </div>
+               </div>
+            </div>
+
+            <div class="col-lg-4">
+               <div class="card">
+                  <div class="card-body">
+                     <h5 class="card-title">Data Bus Status</h5>
+                     <div class="d-flex flex-row m-2">
+                        <span class="led m-2 data-bus-led"></span>
+                        <span class="led m-2 data-bus-led"></span>
+                        <span class="led m-2 data-bus-led"></span>
+                        <span class="led m-2 data-bus-led"></span>
+                        <span class="led m-2 data-bus-led"></span>
+                        <span class="led m-2 data-bus-led"></span>
+                        <span class="led m-2 data-bus-led"></span>
+                        <span class="led m-2 data-bus-led"></span>
+                     </div>
+                     <div class="d-flex d-flex-row m-2">
+                        <input type="text" id="data-bus-value">
+                     </div>
+                  </div>
+               </div>
+
+               <div class="card mt-3">
+                  <div class="card">
+                     <div class="card-body">
+                        <h5 class="card-title">Program Counter Status</h5>
+                        <div class="d-flex m-2 flex-row">
+                           <span class="led m-2 program-counter-led"></span>
+                           <span class="led m-2 program-counter-led"></span>
+                           <span class="led m-2 program-counter-led"></span>
+                           <span class="led m-2 program-counter-led"></span>
+                           <span class="led m-2 program-counter-led"></span>
+                           <span class="led m-2 program-counter-led"></span>
+                           <span class="led m-2 program-counter-led"></span>
+                           <span class="led m-2 program-counter-led"></span>
+                        </div>
+                        <div class="d-flex flex-row m-2">
+                           <button type="button" class="btn btn-sm btn-primary d-flex flex-row m-2" id="control-PC-PI">
+                              <span class="m-2">PI</span> <span class="led m-2"></span>
+                           </button>
+                           <button type="button" class="btn btn-sm btn-primary d-flex flex-row m-2" id="control-PC-PO">
+                              <span class="m-2">PO</span> <span class="led m-2"></span>
+                           </button>
+                           <button type="button" class="btn btn-sm btn-primary d-flex flex-row m-2" id="control-PC-CE">
+                              <span class="m-2">PCE</span> <span class="led m-2"></span>
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+
+            <div class="col-lg-4">
+               <div class="card">
+                  <div class="card-body">
+                     <h5 class="card-title">Data Register Status</h5>
+                     <div class="d-flex flex-row m-2">
+                        <span class="led m-2 register-led"></span>
+                        <span class="led m-2 register-led"></span>
+                        <span class="led m-2 register-led"></span>
+                        <span class="led m-2 register-led"></span>
+                        <span class="led m-2 register-led"></span>
+                        <span class="led m-2 register-led"></span>
+                        <span class="led m-2 register-led"></span>
+                        <span class="led m-2 register-led"></span>
+                     </div>
+                     <div class="d-flex flex-row m-2">
+                        <button type="button" id="control-RO" class="btn btn-sm btn-primary d-flex flex-row m-2">
+                           <span class="m-2">RO</span> <span class="led m-2 control-bus-led"></span>
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm d-flex flex-row m-2" id="control-RI">
+                           <span class="m-2">RI</span> <span class="led m-2 control-bus-led"></span>
+                        </button>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="card mt-3">
+                  <div class="card-body">
+                     <h5 class="card-title">ALU Status</h5>
+                     <h6>A Register Status</h6>
+                     <div class="d-flex flex-row m-2">
+                        <span class="led m-2 alu-a-led"></span>
+                        <span class="led m-2 alu-a-led"></span>
+                        <span class="led m-2 alu-a-led"></span>
+                        <span class="led m-2 alu-a-led"></span>
+                        <span class="led m-2 alu-a-led"></span>
+                        <span class="led m-2 alu-a-led"></span>
+                        <span class="led m-2 alu-a-led"></span>
+                        <span class="led m-2 alu-a-led"></span>
+                     </div>
+                     <h6>B Register Status</h6>
+                     <div class="d-flex flex-row m-2">
+                        <span class="led m-2 alu-b-led"></span>
+                        <span class="led m-2 alu-b-led"></span>
+                        <span class="led m-2 alu-b-led"></span>
+                        <span class="led m-2 alu-b-led"></span>
+                        <span class="led m-2 alu-b-led"></span>
+                        <span class="led m-2 alu-b-led"></span>
+                        <span class="led m-2 alu-b-led"></span>
+                        <span class="led m-2 alu-b-led"></span>
+                     </div>
+                     <h6>Output Register Status</h6>
+                     <div class="d-flex flex-row m-2">
+                        <span class="led m-2 alu-out-led"></span>
+                        <span class="led m-2 alu-out-led"></span>
+                        <span class="led m-2 alu-out-led"></span>
+                        <span class="led m-2 alu-out-led"></span>
+                        <span class="led m-2 alu-out-led"></span>
+                        <span class="led m-2 alu-out-led"></span>
+                        <span class="led m-2 alu-out-led"></span>
+                        <span class="led m-2 alu-out-led"></span>
+                     </div>
+                     <div class="d-flex m-2 flex-row">
+                        <button type="button" class="btn btn-sm btn-primary d-flex flex-row m-2" id="control-ALU-AI">
+                           <span class="m-2">AI</span> <span class="led m-2 control-bus-led"></span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-primary d-flex flex-row m-2" id="control-ALU-BI">
+                           <span class="m-2">BI</span> <span class="led m-2 control-bus-led"></span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-primary d-flex flex-row m-2" id="control-ALU-SUB">
+                           <span class="m-2">SUB</span> <span class="led m-2 control-bus-led"></span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-primary d-flex flex-row m-2" id="control-ALU-OE">
+                           <span class="m-2">OE</span> <span class="led m-2 control-bus-led"></span>
+                        </button>
+                     </div>
+                  </div>
+               </div>
+
+            </div>
+         </div>
+      </div>
+      
+      <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+      <script src="modules/clock.js"></script>
+      <script src="modules/bus.js"></script>
+      <script src="modules/register.js"></script>
+      <script src="modules/memory.js"></script>
+      <script src="modules/logicgates.js"></script>
+      <script src="modules/alu.js"></script>
+      <script src="modules/counter.js"></script>
+      <script src="js/js-programcounter.js"></script>
+   </body>
+</html>
